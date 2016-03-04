@@ -1,0 +1,26 @@
+ <IfModule mod_rewrite.c>
+
+   RewriteEngine On
+   RewriteBase /
+
+   #Removes access to the system folder by users
+   RewriteCond %{REQUEST_URI} ^system.*
+   RewriteRule ^(.*)$ /bestpractices/index.php?/$1 [L]
+
+   #Removes access to the application folder by users
+   RewriteCond %{REQUEST_URI} ^application.*
+   RewriteRule ^(.*)$ /bestpractices/index.php?/$1 [L]
+
+   #Checks to see if the user is attempting to access a valid file
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+
+   RewriteCond $1 !^(index\.php|alphaproject\/assets|robots\.txt)
+   RewriteRule ^(.*)$ /bestpractices/public_html/index.php?/$1 [L]
+ </IfModule>
+
+ <IfModule !mod_rewrite.c>
+   # If we don't have mod_rewrite installed, all 404's
+   # can be sent to index.php, and everything works as normal.
+   ErrorDocument 404 /index.php
+  </IfModule>
